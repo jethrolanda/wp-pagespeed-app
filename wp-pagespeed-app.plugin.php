@@ -42,10 +42,10 @@ class WP_Pagespeed_App
 		$this->shortcode = WPA\Plugin\Shortcode::instance();
 
 		// Register Activation Hook
-		register_activation_hook(WPA_PLUGIN_DIR . 'fuel-logic-service-area.php', array($this, 'activate'));
+		register_activation_hook(WPA_PLUGIN_DIR . 'wp-pagespeed-app.php', array($this, 'activate'));
 
 		// Register Deactivation Hook
-		register_deactivation_hook(WPA_PLUGIN_DIR . 'fuel-logic-service-area.php', array($this, 'deactivate'));
+		register_deactivation_hook(WPA_PLUGIN_DIR . 'wp-pagespeed-app.php', array($this, 'deactivate'));
 	}
 
 	/**

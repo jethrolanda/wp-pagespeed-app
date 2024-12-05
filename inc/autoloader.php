@@ -1,6 +1,6 @@
 <?php
 spl_autoload_register(function ($class) {
-  $namespace = 'FLSA\Plugin\\';
+  $namespace = 'WPA\Plugin\\';
 
   if (strpos($class, $namespace) !== 0) {
     return;
@@ -9,7 +9,7 @@ spl_autoload_register(function ($class) {
   $class = str_replace($namespace, '', $class);
   $class = str_replace('\\', DIRECTORY_SEPARATOR, strtolower($class)) . '.class.php';
 
-  $path = FLSA_PLUGIN_DIR . 'includes' . DIRECTORY_SEPARATOR . $class;
+  $path = WPA_PLUGIN_DIR . 'includes' . DIRECTORY_SEPARATOR . $class;
 
 
   if (file_exists($path)) {

@@ -1,31 +1,17 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "fuel-logic-service-area/fuel-logic-service-area",
+	"name": "pagespeed/pagespeed-app",
 	"version": "0.1.0",
-	"title": "Fuel Logic Service Area",
-	"category": "fuel-logic-service-area-blocks",
-	"attributes": { 
-		"successMessagePattern": {
-			"type": "string"
-		},
-		"failMessagePattern": {
-			"type": "string"
-		},
-		"bannedMessagePattern": {
-			"type": "string"
-		},
-		"bannedStates": {
-			"type": "string"
-		}
-  },
+	"title": "Pagespeed App",
+	"category": "pagespeed-app-block",
 	"icon": "media-interactive",
 	"description": "An interactive block with the Interactivity API",
 	"example": {},
-	"textdomain": "blocks",
-	"supports": { 
+	"supports": {
 		"interactivity": true
-	}, 
+	},
+	"textdomain": "blocks",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

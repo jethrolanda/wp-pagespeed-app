@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: WP Pagespeed App
- * Description: WP Pagespeed APp.
+ * Description: WP Pagespeed App.
  * Version: 1.0
  * Author: Xammis
  * Author URI: https://xammis.com/

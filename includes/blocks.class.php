@@ -33,10 +33,6 @@ class Blocks
     add_action('init', array($this, 'create_block_blocks_block_init'));
 
     add_filter('block_categories_all', array($this, 'register_new_category'));
-
-    add_action('enqueue_block_editor_assets', array($this, 'my_block_editor_styles'));
-
-    // add_action('wp_loaded', array($this, 'register_patterns'));
   }
 
   /**
@@ -68,45 +64,10 @@ class Blocks
 
     // Adding a new category.
     $categories[] = array(
-      'slug'  => 'fuel-logic-service-area-blocks',
-      'title' => 'Fuel Logic Service Area'
+      'slug'  => 'pagespeed-app-block',
+      'title' => 'Pagespeed App'
     );
 
     return $categories;
-  }
-  public function my_block_editor_styles() {}
-
-  /**
-   * Register block pattern for Empty Cart Message to make it translatable.
-   */
-  public function register_patterns()
-  {
-    register_block_pattern(
-      'fuel-logic-service-area/success-zipcode',
-      array(
-        'title'    => 'Success Zipcode',
-        'description' => _x('Success Zipcode.', 'Block pattern description', 'wpdocs-my-plugin'),
-        'inserter' => false,
-        'content'  => '<!-- wp:heading {"align":"wide", "level":1} --><h1 class="wp-block-heading alignwide">' . esc_html__('Success Zipcode', 'woocommerce') . '</h1><!-- /wp:heading -->',
-      )
-    );
-    register_block_pattern(
-      'fuel-logic-service-area/invalid-zipcode',
-      array(
-        'title'    => 'Invalid Zipcode',
-        'description' => _x('Invalid Zipcode.', 'Block pattern description', 'wpdocs-my-plugin'),
-        'inserter' => false,
-        'content'  => '<!-- wp:heading {"align":"wide", "level":1} --><h1 class="wp-block-heading alignwide">' . esc_html__('Invalid Zipcode', 'woocommerce') . '</h1><!-- /wp:heading -->',
-      )
-    );
-    register_block_pattern(
-      'fuel-logic-service-area/banned-zipcode',
-      array(
-        'title'    => 'Banned Zipcode',
-        'description' => _x('Banned Zipcode.', 'Block pattern description', 'wpdocs-my-plugin'),
-        'inserter' => false,
-        'content'  => '<!-- wp:heading {"align":"wide", "level":1} --><h1 class="wp-block-heading alignwide">' . esc_html__('Banned Zipcode', 'woocommerce') . '</h1><!-- /wp:heading -->',
-      )
-    );
   }
 }
