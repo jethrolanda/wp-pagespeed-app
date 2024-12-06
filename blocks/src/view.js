@@ -2,12 +2,67 @@
  * WordPress dependencies
  */
 import { store, getContext, getElement } from "@wordpress/interactivity";
-
-store("pagespeed-app", {
+import { getPages, pageSpeed } from "./actions";
+const { state, callbacks } = store("pagespeed-app", {
   actions: {
-    submit: () => {
+    submit: async () => {
       const context = getContext();
-      alert(context.url);
+
+      if (callbacks.isUrlValid()) {
+        context.processing = true;
+        context.submitBtnText = "Processing...";
+        //   const formData = new FormData();
+        //   formData.append("action", "wpa_generate_pagespeed_report");
+        //   formData.append("nonce", state.nonce);
+        //   formData.append("url", context.url);
+        //   formData.append("device", context.device);
+        //   formData.append("post_types", context.post_types);
+        //   formData.append("category", context.category);
+
+        //   yield fetch(state.ajax_url, {
+        //     method: "POST",
+        //     body: formData
+        //   })
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //       console.log(data);
+        //       if (data.status === "success") {
+        //       }
+        //     })
+        //     .finally(() => {
+        //       context.processing = false;
+        //       context.submitBtnText = "Submit";
+        //     });
+        // } else {
+        //   alert("Invalid url");
+        let page = 1;
+        let isDone = false;
+
+        try {
+          while (!isDone) {
+            console.log(isDone, page);
+            const query = `?page=${page}`;
+            const result = await getPages(context.url, query);
+            const totalPages = result?.totalPages;
+            context.submitBtnText = `Processing... Page ${page} out of ${totalPages}`;
+            const scores = await pageSpeed(result?.urls);
+            context.pagespeedResults = [...context.pagespeedResults, ...scores];
+            // setData((prev) => [...prev, ...scores]);
+
+            console.log(context.pagespeedResults);
+            if (page < parseInt(totalPages)) {
+              page += 1;
+            } else {
+              isDone = true;
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        } finally {
+          context.processing = false;
+          context.submitBtnText = "Submit";
+        }
+      }
     }
   },
   callbacks: {
@@ -42,9 +97,26 @@ store("pagespeed-app", {
         default:
           break;
       }
+    },
+    isUrlValid: () => {
+      try {
+        const context = getContext();
+        const pattern = new RegExp(
+          "^([a-zA-Z]+:\\/\\/)?" + // protocol
+            "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+            "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR IP (v4) address
+            "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+            "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+            "(\\#[-a-z\\d_]*)?$", // fragment locator
+          "i"
+        );
 
-      // context?.[ref.name] = ref.value;
-      // console.log(ref, ref.name);
+        // console.log(new URL(context.url));
+        // return new URL(context.url) ? true : false;
+        return pattern.test(context.url);
+      } catch (error) {
+        return false;
+      }
     }
   }
 });

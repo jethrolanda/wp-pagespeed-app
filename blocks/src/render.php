@@ -13,15 +13,20 @@
 
 // Global State
 wp_interactivity_state('pagespeed-app', array(
-	'test' => 'test'
+	'ajax_url' => admin_url('admin-ajax.php'),
+	'nonce' => wp_create_nonce('pagespeedapp'),
 ));
+
 
 // Local Context
 $context = array(
 	'url' => '',
 	'device' => 'mobile',
 	'post_types' => array('page', 'post', 'custom_post_type'),
-	'category' => array('performance')
+	'category' => array('performance'),
+	'processing' => false,
+	'submitBtnText' => 'Submit',
+	'pagespeedResults' => array()
 );
 ?>
 
@@ -58,5 +63,28 @@ $context = array(
 		<input type="checkbox" id="seo" name="category" value="seo" data-wp-on--click="callbacks.setOptions">
 		<label for="seo">SEO</label>
 	</div>
-	<button data-wp-on--click="actions.submit">Submit</button>
+	<button data-wp-on--click="actions.submit" data-wp-bind--disabled="context.processing" data-wp-text="context.submitBtnText">Submit</button>
+
+	<div>
+		<table>
+			<tbody>
+				<tr>
+					<th>URL</th>
+					<th>Performance</th>
+					<th>Accessability</th>
+					<th>Best Practices</th>
+					<th>SEO</th>
+				</tr>
+				<template data-wp-each="context.pagespeedResults">
+					<tr>
+						<td data-wp-text="context.item.url"></td>
+						<td data-wp-text="context.item.performance"></td>
+						<td data-wp-text="context.item.accessibility"></td>
+						<td data-wp-text="context.item.best_practices"></td>
+						<td data-wp-text="context.item.seo"></td>
+					</tr>
+				</template>
+			</tbody>
+		</table>
+	</div>
 </div>
