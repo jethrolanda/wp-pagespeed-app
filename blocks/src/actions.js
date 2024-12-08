@@ -53,7 +53,7 @@ export async function pageSpeed(urls, params) {
 export async function getPages(url, params) {
   try {
     console.log(`${url}wp-json/wp/v2/pages${params}`);
-    const response = await fetch(`${url}wp-json/wp/v2/pages${params}`);
+    const response = await fetch(`${url}wp-json/wp/v2/posts${params}`);
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }

@@ -23,7 +23,7 @@ $context = array(
 	'url' => '',
 	'device' => 'mobile',
 	'post_types' => array('page', 'post', 'custom_post_type'),
-	'category' => array('performance'),
+	'category' => array('performance', 'accessibility', 'best-practices', 'seo'),
 	'processing' => false,
 	'submitBtnText' => 'Submit',
 	'pagespeedResults' => array()
@@ -56,11 +56,11 @@ $context = array(
 		<span>Category:</span>
 		<input type="checkbox" id="performance" name="category" value="performance" checked data-wp-on--click="callbacks.setOptions">
 		<label for="performance">Performance</label>
-		<input type="checkbox" id="accessibility" name="category" value="accessibility" data-wp-on--click="callbacks.setOptions">
+		<input type="checkbox" id="accessibility" name="category" value="accessibility" checked data-wp-on--click="callbacks.setOptions">
 		<label for="accessibility">Accessibility</label>
-		<input type="checkbox" id="best-practices" name="category" value="best-practices" data-wp-on--click="callbacks.setOptions">
+		<input type="checkbox" id="best-practices" name="category" value="best-practices" checked data-wp-on--click="callbacks.setOptions">
 		<label for="best-practices">Best Practices</label>
-		<input type="checkbox" id="seo" name="category" value="seo" data-wp-on--click="callbacks.setOptions">
+		<input type="checkbox" id="seo" name="category" value="seo" checked data-wp-on--click="callbacks.setOptions">
 		<label for="seo">SEO</label>
 	</div>
 	<button data-wp-on--click="actions.submit" data-wp-bind--disabled="context.processing" data-wp-text="context.submitBtnText">Submit</button>
@@ -70,10 +70,10 @@ $context = array(
 			<tbody>
 				<tr>
 					<th>URL</th>
-					<th data-wp-bind--hidden="!state.isPerformanceSelected">Performance</th>
-					<th data-wp-bind--hidden="!state.isAccessibility">Accessability</th>
-					<th data-wp-bind--hidden="!state.isBestPracticesSelected">Best Practices</th>
-					<th data-wp-bind--hidden="!state.isSeoSelected">SEO</th>
+					<th data-wp-bind--hidden="!state.isPerformanceSelected" data-wp-on--click="callbacks.sortPerformance">Performance</th>
+					<th data-wp-bind--hidden="!state.isAccessibility" data-wp-on--click="callbacks.sortAccessibility">Accessibility</th>
+					<th data-wp-bind--hidden="!state.isBestPracticesSelected" data-wp-on--click="callbacks.sortBestPractices">Best Practices</th>
+					<th data-wp-bind--hidden="!state.isSeoSelected" data-wp-on--click="callbacks.sortSeo">SEO</th>
 				</tr>
 				<template data-wp-each="context.pagespeedResults">
 					<tr>

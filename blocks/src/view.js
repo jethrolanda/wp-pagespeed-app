@@ -5,6 +5,10 @@ import { store, getContext, getElement } from "@wordpress/interactivity";
 import { getPages, pageSpeed } from "./actions";
 const { state, callbacks } = store("pagespeed-app", {
   state: {
+    performanceSorted: false,
+    accessibilitySorted: false,
+    bestPracticesSorted: false,
+    seoSorted: false,
     get isNotEmpty() {
       return getContext().pagespeedResults.length > 0;
     },
@@ -138,6 +142,41 @@ const { state, callbacks } = store("pagespeed-app", {
       } catch (error) {
         return false;
       }
+    },
+    sortPerformance: () => {
+      console.log(state.performanceSorted);
+      const context = getContext();
+      context.pagespeedResults = context.pagespeedResults.sort((a, b) => {
+        return state.performanceSorted
+          ? b?.performance - a?.performance
+          : a?.performance - b?.performance;
+      });
+      state.performanceSorted = !state.performanceSorted;
+    },
+    sortAccessibility: () => {
+      const context = getContext();
+      context.pagespeedResults = context.pagespeedResults.sort((a, b) => {
+        return state.accessibilitySorted
+          ? b?.accessibility - a?.accessibility
+          : a?.accessibility - b?.accessibility;
+      });
+      state.accessibilitySorted = !state.accessibilitySorted;
+    },
+    sortBestPractices: () => {
+      const context = getContext();
+      context.pagespeedResults = context.pagespeedResults.sort((a, b) => {
+        return state.bestPracticesSorted
+          ? b?.["best-practices"] - a?.["best-practices"]
+          : a?.["best-practices"] - b?.["best-practices"];
+      });
+      state.bestPracticesSorted = !state.bestPracticesSorted;
+    },
+    sortSeo: () => {
+      const context = getContext();
+      context.pagespeedResults = context.pagespeedResults.sort((a, b) => {
+        return state.seoSorted ? b?.seo - a?.seo : a?.seo - b?.seo;
+      });
+      state.seoSorted = !state.seoSorted;
     }
   }
 });
