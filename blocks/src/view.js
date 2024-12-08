@@ -87,6 +87,8 @@ const { state, callbacks } = store("pagespeed-app", {
           context.processing = false;
           context.submitBtnText = "Submit";
         }
+      } else {
+        alert("Invalid URL");
       }
     }
   },
@@ -166,8 +168,8 @@ const { state, callbacks } = store("pagespeed-app", {
       const context = getContext();
       context.pagespeedResults = context.pagespeedResults.sort((a, b) => {
         return state.bestPracticesSorted
-          ? b?.["best-practices"] - a?.["best-practices"]
-          : a?.["best-practices"] - b?.["best-practices"];
+          ? b?.best_practices - a?.best_practices
+          : a?.best_practices - b?.best_practices;
       });
       state.bestPracticesSorted = !state.bestPracticesSorted;
     },
