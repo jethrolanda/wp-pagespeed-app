@@ -1,22 +1,47 @@
-export async function pageSpeed(urls) {
+export async function pageSpeed(urls, params) {
   try {
     const promises = urls.map(async (url) => {
       const report = await fetch(
-        `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${url}&strategy=mobile&category=accessibility&category=best-practices&category=performance&category=seo&key=AIzaSyBEQiaTL4wMnMCQA2WABjuIAOXLaL5LUo0`
+        `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${url}&${params}&key=AIzaSyBEQiaTL4wMnMCQA2WABjuIAOXLaL5LUo0`
       ).then((response) => {
         return response.json();
       });
 
-      return {
-        url,
-        performance:
-          report?.lighthouseResult?.categories?.performance?.score * 100,
-        accessibility:
-          report?.lighthouseResult?.categories?.accessibility?.score * 100,
-        best_practices:
-          report?.lighthouseResult?.categories?.["best-practices"]?.score * 100,
-        seo: report?.lighthouseResult?.categories?.seo?.score * 100
-      };
+      let data = { url };
+      if (report?.lighthouseResult?.categories?.performance?.score) {
+        data = {
+          ...data,
+          performance: Math.round(
+            report?.lighthouseResult?.categories?.performance?.score * 100
+          )
+        };
+      }
+      if (report?.lighthouseResult?.categories?.accessibility?.score) {
+        data = {
+          ...data,
+          accessibility: Math.round(
+            report?.lighthouseResult?.categories?.accessibility?.score * 100
+          )
+        };
+      }
+      if (report?.lighthouseResult?.categories?.["best-practices"]?.score) {
+        data = {
+          ...data,
+          best_practices: Math.round(
+            report?.lighthouseResult?.categories?.["best-practices"]?.score *
+              100
+          )
+        };
+      }
+      if (report?.lighthouseResult?.categories?.seo?.score) {
+        data = {
+          ...data,
+          seo: Math.round(
+            report?.lighthouseResult?.categories?.seo?.score * 100
+          )
+        };
+      }
+      return data;
     });
 
     return await Promise.all(promises);

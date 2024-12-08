@@ -58,30 +58,30 @@ $context = array(
 		<label for="performance">Performance</label>
 		<input type="checkbox" id="accessibility" name="category" value="accessibility" data-wp-on--click="callbacks.setOptions">
 		<label for="accessibility">Accessibility</label>
-		<input type="checkbox" id="best_practices" name="category" value="best_practices" data-wp-on--click="callbacks.setOptions">
-		<label for="best_practices">Best Practices</label>
+		<input type="checkbox" id="best-practices" name="category" value="best-practices" data-wp-on--click="callbacks.setOptions">
+		<label for="best-practices">Best Practices</label>
 		<input type="checkbox" id="seo" name="category" value="seo" data-wp-on--click="callbacks.setOptions">
 		<label for="seo">SEO</label>
 	</div>
 	<button data-wp-on--click="actions.submit" data-wp-bind--disabled="context.processing" data-wp-text="context.submitBtnText">Submit</button>
 
-	<div>
+	<div data-wp-bind--hidden="!state.isNotEmpty">
 		<table>
 			<tbody>
 				<tr>
 					<th>URL</th>
-					<th>Performance</th>
-					<th>Accessability</th>
-					<th>Best Practices</th>
-					<th>SEO</th>
+					<th data-wp-bind--hidden="!state.isPerformanceSelected">Performance</th>
+					<th data-wp-bind--hidden="!state.isAccessibility">Accessability</th>
+					<th data-wp-bind--hidden="!state.isBestPracticesSelected">Best Practices</th>
+					<th data-wp-bind--hidden="!state.isSeoSelected">SEO</th>
 				</tr>
 				<template data-wp-each="context.pagespeedResults">
 					<tr>
 						<td data-wp-text="context.item.url"></td>
-						<td data-wp-text="context.item.performance"></td>
-						<td data-wp-text="context.item.accessibility"></td>
-						<td data-wp-text="context.item.best_practices"></td>
-						<td data-wp-text="context.item.seo"></td>
+						<td data-wp-bind--hidden="!state.isPerformanceSelected" data-wp-text="context.item.performance"></td>
+						<td data-wp-bind--hidden="!state.isAccessibility" data-wp-text="context.item.accessibility"></td>
+						<td data-wp-bind--hidden="!state.isBestPracticesSelected" data-wp-text="context.item.best_practices"></td>
+						<td data-wp-bind--hidden="!state.isSeoSelected" data-wp-text="context.item.seo"></td>
 					</tr>
 				</template>
 			</tbody>

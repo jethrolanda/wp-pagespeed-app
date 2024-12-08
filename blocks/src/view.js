@@ -4,9 +4,27 @@
 import { store, getContext, getElement } from "@wordpress/interactivity";
 import { getPages, pageSpeed } from "./actions";
 const { state, callbacks } = store("pagespeed-app", {
+  state: {
+    get isNotEmpty() {
+      return getContext().pagespeedResults.length > 0;
+    },
+    get isPerformanceSelected() {
+      return getContext().category.includes("performance");
+    },
+    get isAccessibility() {
+      return getContext().category.includes("accessibility");
+    },
+    get isBestPracticesSelected() {
+      return getContext().category.includes("best-practices");
+    },
+    get isSeoSelected() {
+      return getContext().category.includes("seo");
+    }
+  },
   actions: {
     submit: async () => {
       const context = getContext();
+      context.pagespeedResults = [];
 
       if (callbacks.isUrlValid()) {
         context.processing = true;
@@ -45,7 +63,10 @@ const { state, callbacks } = store("pagespeed-app", {
             const result = await getPages(context.url, query);
             const totalPages = result?.totalPages;
             context.submitBtnText = `Processing... Page ${page} out of ${totalPages}`;
-            const scores = await pageSpeed(result?.urls);
+            const params = `strategy=${
+              context.device
+            }&category=${context.category.join("&category=")}`;
+            const scores = await pageSpeed(result?.urls, params);
             context.pagespeedResults = [...context.pagespeedResults, ...scores];
             // setData((prev) => [...prev, ...scores]);
 
