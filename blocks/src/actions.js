@@ -52,14 +52,13 @@ export async function pageSpeed(urls, params) {
 
 export async function getPages(url, params) {
   try {
-    console.log(`${url}wp-json/wp/v2/pages${params}`);
-    const response = await fetch(`${url}wp-json/wp/v2/posts${params}`);
+    const response = await fetch(`${url}wp-json/wp/v2/pages${params}`);
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }
 
     const data = await response.json();
-    const urls = data.map((page) => page?.link); // eslint-disable-line no-use-before-define
+    const urls = data.map((page) => page?.link);
 
     return {
       totalPages: response?.headers.get("x-wp-totalpages"),

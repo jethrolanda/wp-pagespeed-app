@@ -69,6 +69,7 @@ const { state, callbacks } = store("pagespeed-app", {
           }
         } catch (error) {
           console.log(error);
+          alert("Error: Make sure the site is powered by wordpress");
         } finally {
           context.processing = false;
           context.submitBtnText = "Submit";
@@ -164,19 +165,8 @@ const { state, callbacks } = store("pagespeed-app", {
     },
     getDomainNameFromUrl: () => {
       const context = getContext();
-      var result;
-      var match;
-      if (
-        (match = context.url.match(
-          /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n\?\=]+)/im
-        ))
-      ) {
-        result = match[1];
-        if ((match = result.match(/^[^\.]+\.(.+\..+)$/))) {
-          result = match[1];
-        }
-      }
-      return result;
+      const host = new URL(context.url).host;
+      return host;
     },
     sortPerformance: () => {
       const context = getContext();
