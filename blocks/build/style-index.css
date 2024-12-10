@@ -367,6 +367,8 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
   grid-column-start: 1;
 }.my-unique-plugin-wrapper-class .row-start-1{
   grid-row-start: 1;
+}.my-unique-plugin-wrapper-class .mb-2{
+  margin-bottom: 0.5rem;
 }.my-unique-plugin-wrapper-class .mt-2{
   margin-top: 0.5rem;
 }.my-unique-plugin-wrapper-class .mt-4{
@@ -391,6 +393,8 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
   width: 100%;
 }.my-unique-plugin-wrapper-class .shrink-0{
   flex-shrink: 0;
+}.my-unique-plugin-wrapper-class .cursor-pointer{
+  cursor: pointer;
 }.my-unique-plugin-wrapper-class .appearance-none{
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -419,6 +423,8 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
   justify-self: center;
 }.my-unique-plugin-wrapper-class .rounded{
   border-radius: 0.25rem;
+}.my-unique-plugin-wrapper-class .rounded-2xl{
+  border-radius: 1rem;
 }.my-unique-plugin-wrapper-class .rounded-full{
   border-radius: 9999px;
 }.my-unique-plugin-wrapper-class .rounded-md{
@@ -431,11 +437,19 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 }.my-unique-plugin-wrapper-class .bg-indigo-600{
   --tw-bg-opacity: 1;
   background-color: rgb(79 70 229 / var(--tw-bg-opacity, 1));
+}.my-unique-plugin-wrapper-class .bg-slate-200{
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity, 1));
+}.my-unique-plugin-wrapper-class .bg-slate-400{
+  --tw-bg-opacity: 1;
+  background-color: rgb(148 163 184 / var(--tw-bg-opacity, 1));
 }.my-unique-plugin-wrapper-class .bg-white{
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
 }.my-unique-plugin-wrapper-class .stroke-white{
   stroke: #fff;
+}.my-unique-plugin-wrapper-class .p-1{
+  padding: 0.25rem;
 }.my-unique-plugin-wrapper-class .px-3{
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -445,15 +459,22 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 }.my-unique-plugin-wrapper-class .py-2{
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+}.my-unique-plugin-wrapper-class .text-center{
+  text-align: center;
 }.my-unique-plugin-wrapper-class .text-base{
   font-size: 1rem;
   line-height: 1.5rem;
+}.my-unique-plugin-wrapper-class .text-lg{
+  font-size: 1.125rem;
+  line-height: 1.75rem;
 }.my-unique-plugin-wrapper-class .text-sm{
   font-size: 0.875rem;
   line-height: 1.25rem;
 }.my-unique-plugin-wrapper-class .text-sm\/6{
   font-size: 0.875rem;
   line-height: 1.5rem;
+}.my-unique-plugin-wrapper-class .font-bold{
+  font-weight: 700;
 }.my-unique-plugin-wrapper-class .font-medium{
   font-weight: 500;
 }.my-unique-plugin-wrapper-class .font-semibold{
@@ -461,6 +482,9 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 }.my-unique-plugin-wrapper-class .text-gray-900{
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity, 1));
+}.my-unique-plugin-wrapper-class .text-slate-200{
+  --tw-text-opacity: 1;
+  color: rgb(226 232 240 / var(--tw-text-opacity, 1));
 }.my-unique-plugin-wrapper-class .text-white{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));

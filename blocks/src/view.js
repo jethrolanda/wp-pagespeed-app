@@ -23,6 +23,15 @@ const { state, callbacks } = store("pagespeed-app", {
     },
     get isSeoSelected() {
       return getContext().category.includes("seo");
+    },
+    get progressPercentage() {
+      const context = getContext();
+      const progress = Math.round((context.page / context.totalPages) * 100);
+      return `${progress < 5 ? "5" : progress}%`;
+    },
+    get getStatus() {
+      const context = getContext();
+      return `${context.page} out of ${context.totalPages}`;
     }
   },
   actions: {
@@ -31,42 +40,18 @@ const { state, callbacks } = store("pagespeed-app", {
       context.pagespeedResults = [];
 
       if (callbacks.isUrlValid()) {
+        context.bgcolor = "#fff";
         context.processing = true;
+        context.isDone = false;
         context.submitBtnText = "Processing...";
-        //   const formData = new FormData();
-        //   formData.append("action", "wpa_generate_pagespeed_report");
-        //   formData.append("nonce", state.nonce);
-        //   formData.append("url", context.url);
-        //   formData.append("device", context.device);
-        //   formData.append("post_types", context.post_types);
-        //   formData.append("category", context.category);
-
-        //   yield fetch(state.ajax_url, {
-        //     method: "POST",
-        //     body: formData
-        //   })
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //       console.log(data);
-        //       if (data.status === "success") {
-        //       }
-        //     })
-        //     .finally(() => {
-        //       context.processing = false;
-        //       context.submitBtnText = "Submit";
-        //     });
-        // } else {
-        //   alert("Invalid url");
-        let page = 1;
-        let isDone = false;
 
         try {
-          while (!isDone) {
-            console.log(isDone, page);
-            const query = `?page=${page}`;
+          while (!context.isDone) {
+            console.log(context.isDone, context.page);
+            const query = `?page=${context.page}`;
             const result = await getPages(context.url, query);
-            const totalPages = result?.totalPages;
-            context.submitBtnText = `Processing... Page ${page} out of ${totalPages}`;
+            context.totalPages = result?.totalPages;
+            context.status = `Page ${context.page} out of ${context.totalPages}`;
             const params = `strategy=${
               context.device
             }&category=${context.category.join("&category=")}`;
@@ -75,10 +60,11 @@ const { state, callbacks } = store("pagespeed-app", {
             // setData((prev) => [...prev, ...scores]);
 
             console.log(context.pagespeedResults);
-            if (page < parseInt(totalPages)) {
-              page += 1;
+            if (context.page < parseInt(context.totalPages)) {
+              context.page += 1;
             } else {
-              isDone = true;
+              context.isDone = true;
+              context.status = "";
             }
           }
         } catch (error) {
@@ -86,10 +72,41 @@ const { state, callbacks } = store("pagespeed-app", {
         } finally {
           context.processing = false;
           context.submitBtnText = "Submit";
+          context.bgcolor = "";
         }
       } else {
         alert("Invalid URL");
       }
+    },
+    downloadCSV: () => {
+      const context = getContext();
+      if (context.pagespeedResults.length <= 0)
+        alert("Please generate a report first.");
+
+      const titleKeys = Object.keys(context.pagespeedResults[0]);
+
+      const refinedData = [];
+      refinedData.push(titleKeys);
+
+      context.pagespeedResults.forEach((item) => {
+        refinedData.push(Object.values(item));
+      });
+      let csvContent = "";
+
+      refinedData.forEach((row) => {
+        csvContent += row.join(",") + "\n";
+      });
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8," });
+      const objUrl = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.setAttribute("href", objUrl);
+      link.setAttribute(
+        "download",
+        `Pagespeed report for ${callbacks.getDomainNameFromUrl()} - ${new Date().toLocaleString()}.csv`
+      );
+      link.click();
     }
   },
   callbacks: {
@@ -145,8 +162,23 @@ const { state, callbacks } = store("pagespeed-app", {
         return false;
       }
     },
+    getDomainNameFromUrl: () => {
+      const context = getContext();
+      var result;
+      var match;
+      if (
+        (match = context.url.match(
+          /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n\?\=]+)/im
+        ))
+      ) {
+        result = match[1];
+        if ((match = result.match(/^[^\.]+\.(.+\..+)$/))) {
+          result = match[1];
+        }
+      }
+      return result;
+    },
     sortPerformance: () => {
-      console.log(state.performanceSorted);
       const context = getContext();
       context.pagespeedResults = context.pagespeedResults.sort((a, b) => {
         return state.performanceSorted

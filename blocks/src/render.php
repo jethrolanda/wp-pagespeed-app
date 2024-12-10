@@ -26,14 +26,19 @@ $context = array(
 	'category' => array('performance', 'accessibility', 'best-practices', 'seo'),
 	'processing' => false,
 	'submitBtnText' => 'Submit',
-	'pagespeedResults' => array()
+	'pagespeedResults' => array(),
+	'status' => '', // ex: Page 1 out of 10
+	'page' => 1,
+	'totalPages' => 1,
+	'isDone' => false,
+	'bgcolor' => '', // processing bg color
 );
 
 $radio_btn_class = 'class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"';
 
 $checkbox_class = 'class="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"';
 
-$submit_btn_class = 'class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mt-4"';
+$submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 mt-4';
 ?>
 
 <div class="my-unique-plugin-wrapper-class">
@@ -42,7 +47,9 @@ $submit_btn_class = 'class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semi
 		<?php echo get_block_wrapper_attributes(); ?>
 		<?php echo wp_interactivity_data_wp_context($context); ?>
 		data-wp-watch="callbacks.logIsOpen">
-		<input type="text" placeholder="Enter wp website url" data-wp-on--keyup="callbacks.setUrl" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+		<div class="mt-4 space-y-10">
+			<input type="text" placeholder="Site url. Example: https://www.fuellogic.net/" data-wp-on--keyup="callbacks.setUrl" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+		</div>
 
 		<div class="mt-4 space-y-10">
 			<fieldset>
@@ -184,17 +191,28 @@ $submit_btn_class = 'class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semi
 			</fieldset>
 		</div>
 
-		<button data-wp-on--click="actions.submit" data-wp-bind--disabled="context.processing" data-wp-text="context.submitBtnText" <?php echo $submit_btn_class; ?>>Submit</button>
+		<button data-wp-on--click="actions.submit" data-wp-bind--disabled="context.processing" data-wp-text="context.submitBtnText" class="<?php echo $submit_btn_class; ?>" data-wp-class--bg-indigo-400="context.processing">Submit</button>
+
+		<div class="w-full mt-4" data-wp-bind--hidden="!context.processing">
+			<p class="text-center text-lg font-bold mb-2" data-wp-text="context.status"></p>
+			<div class="bg-slate-200 w-full rounded-2xl">
+				<div class="bg-slate-400 text-slate-200 rounded-2xl p-1 text-center" data-wp-style--width="state.progressPercentage" data-wp-text="state.progressPercentage">100%</div>
+			</div>
+		</div>
+
+		<div class="w-ful mt-4" data-wp-bind--hidden="!state.isNotEmpty">
+			<button data-wp-bind--disabled="context.processing" data-wp-on--click="actions.downloadCSV" class="<?php echo $submit_btn_class; ?> flex gap-2 "><img src="<?php echo WPA_BLOCKS_ROOT_URL; ?>assets/csv.png" data-wp-style--background="context.bgcolor">Download CSV</button>
+		</div>
 
 		<div data-wp-bind--hidden="!state.isNotEmpty">
 			<table>
 				<tbody>
 					<tr>
 						<th>URL</th>
-						<th data-wp-bind--hidden="!state.isPerformanceSelected" data-wp-on--click="callbacks.sortPerformance">Performance</th>
-						<th data-wp-bind--hidden="!state.isAccessibility" data-wp-on--click="callbacks.sortAccessibility">Accessibility</th>
-						<th data-wp-bind--hidden="!state.isBestPracticesSelected" data-wp-on--click="callbacks.sortBestPractices">Best Practices</th>
-						<th data-wp-bind--hidden="!state.isSeoSelected" data-wp-on--click="callbacks.sortSeo">SEO</th>
+						<th data-wp-bind--hidden="!state.isPerformanceSelected" data-wp-on--click="callbacks.sortPerformance" class="cursor-pointer">Performance</th>
+						<th data-wp-bind--hidden="!state.isAccessibility" data-wp-on--click="callbacks.sortAccessibility" class="cursor-pointer">Accessibility</th>
+						<th data-wp-bind--hidden="!state.isBestPracticesSelected" data-wp-on--click="callbacks.sortBestPractices" class="cursor-pointer">Best Practices</th>
+						<th data-wp-bind--hidden="!state.isSeoSelected" data-wp-on--click="callbacks.sortSeo" class="cursor-pointer">SEO</th>
 					</tr>
 					<template data-wp-each="context.pagespeedResults">
 						<tr>
