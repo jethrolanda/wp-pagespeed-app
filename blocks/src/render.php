@@ -41,7 +41,7 @@ $checkbox_class = 'class="col-start-1 row-start-1 appearance-none rounded border
 $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 mt-4';
 ?>
 
-<div class="my-unique-plugin-wrapper-class">
+<div class="pagespeed-app-wrapper-class">
 	<div
 		data-wp-interactive="pagespeed-app"
 		<?php echo get_block_wrapper_attributes(); ?>
@@ -98,7 +98,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 							</div>
 						</div>
 						<div class="text-sm/6">
-							<label for="post" class="font-medium text-gray-900">Page</label>
+							<label for="post" class="font-medium text-gray-900">Post</label>
 						</div>
 					</div>
 				</div>
@@ -205,7 +205,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 		</div>
 
 		<div data-wp-bind--hidden="!state.isNotEmpty">
-			<table>
+			<table class="w-full table-auto">
 				<tbody>
 					<tr>
 						<th>URL</th>
