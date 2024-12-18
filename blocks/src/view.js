@@ -2,8 +2,8 @@
  * WordPress dependencies
  */
 import { store, getContext, getElement } from "@wordpress/interactivity";
-import { getPages, pageSpeed } from "./actions";
-const { state, callbacks } = store("pagespeed-app", {
+import { getPages, getPosts, getCustomPostTypes, pageSpeed } from "./actions";
+const { state, actions, callbacks } = store("pagespeed-app", {
   state: {
     performanceSorted: false,
     accessibilitySorted: false,
@@ -38,7 +38,7 @@ const { state, callbacks } = store("pagespeed-app", {
     submit: async () => {
       const context = getContext();
       context.pagespeedResults = [];
-
+      console.log(context.post_types);
       if (callbacks.isUrlValid()) {
         context.bgcolor = "#fff";
         context.processing = true;
@@ -46,27 +46,36 @@ const { state, callbacks } = store("pagespeed-app", {
         context.submitBtnText = "Processing...";
 
         try {
-          while (!context.isDone) {
-            console.log(context.isDone, context.page);
-            const query = `?page=${context.page}`;
-            const result = await getPages(context.url, query);
-            context.totalPages = result?.totalPages;
-            context.status = `Page ${context.page} out of ${context.totalPages}`;
-            const params = `strategy=${
-              context.device
-            }&category=${context.category.join("&category=")}`;
-            const scores = await pageSpeed(result?.urls, params);
-            context.pagespeedResults = [...context.pagespeedResults, ...scores];
-            // setData((prev) => [...prev, ...scores]);
-
-            console.log(context.pagespeedResults);
-            if (context.page < parseInt(context.totalPages)) {
-              context.page += 1;
-            } else {
-              context.isDone = true;
-              context.status = "";
-            }
+          if (context.post_types.includes("post")) {
+            await actions.generateReportPosts(context);
           }
+          if (context.post_types.includes("page")) {
+            await actions.generateReportPages(context);
+          }
+          if (context.post_types.includes("custom_post_type")) {
+            actions.generateReportCustomPostTypes(context);
+          }
+
+          // while (!context.isDone) {
+          //   console.log(context.isDone, context.page);
+          //   const query = `?page=${context.page}`;
+          //   const result = await getPages(context.url, query);
+          //   context.totalPages = result?.totalPages;
+          //   context.status = `Page ${context.page} out of ${context.totalPages}`;
+          //   const params = `strategy=${
+          //     context.device
+          //   }&category=${context.category.join("&category=")}`;
+          //   const scores = await pageSpeed(result?.urls, params);
+          //   context.pagespeedResults = [...context.pagespeedResults, ...scores];
+
+          //   console.log(context.pagespeedResults);
+          //   if (context.page < parseInt(context.totalPages)) {
+          //     context.page += 1;
+          //   } else {
+          //     context.isDone = true;
+          //     context.status = "";
+          //   }
+          // }
         } catch (error) {
           console.log(error);
           alert("Error: Make sure the site is powered by wordpress");
@@ -79,35 +88,71 @@ const { state, callbacks } = store("pagespeed-app", {
         alert("Invalid URL");
       }
     },
-    downloadCSV: () => {
-      const context = getContext();
-      if (context.pagespeedResults.length <= 0)
-        alert("Please generate a report first.");
+    generateReportPages: async (context) => {
+      let isDone = false;
+      let page = 1;
+      while (!isDone) {
+        const query = `?page=${page}`;
+        const result = await getPages(context.url, query);
+        context.status = `Page ${page} out of ${result?.totalPages}`;
+        const params = `strategy=${
+          context.device
+        }&category=${context.category.join("&category=")}`;
+        const scores = await pageSpeed(result?.urls, params);
+        context.pagespeedResults = [...context.pagespeedResults, ...scores];
 
-      const titleKeys = Object.keys(context.pagespeedResults[0]);
+        console.log(context.pagespeedResults);
+        if (page < parseInt(result?.totalPages)) {
+          page += 1;
+        } else {
+          isDone = true;
+          context.status = "";
+        }
+      }
+    },
+    generateReportPosts: async (context) => {
+      let isDone = false;
+      let page = 1;
+      while (!isDone) {
+        const query = `?page=${page}`;
+        const result = await getPosts(context.url, query);
+        context.status = `Page ${page} out of ${result?.totalPages}`;
+        const params = `strategy=${
+          context.device
+        }&category=${context.category.join("&category=")}`;
+        const scores = await pageSpeed(result?.urls, params);
+        context.pagespeedResults = [...context.pagespeedResults, ...scores];
 
-      const refinedData = [];
-      refinedData.push(titleKeys);
+        console.log(context.pagespeedResults);
+        if (page < parseInt(result?.totalPages)) {
+          page += 1;
+        } else {
+          isDone = true;
+          context.status = "";
+        }
+      }
+    },
+    generateReportCustomPostTypes: async (context) => {
+      let isDone = false;
+      let page = 1;
+      while (!isDone) {
+        const query = `?page=${page}`;
+        const result = await getCustomPostTypes(context.url, query);
+        context.status = `Page ${page} out of ${result?.totalPages}`;
+        const params = `strategy=${
+          context.device
+        }&category=${context.category.join("&category=")}`;
+        const scores = await pageSpeed(result?.urls, params);
+        context.pagespeedResults = [...context.pagespeedResults, ...scores];
 
-      context.pagespeedResults.forEach((item) => {
-        refinedData.push(Object.values(item));
-      });
-      let csvContent = "";
-
-      refinedData.forEach((row) => {
-        csvContent += row.join(",") + "\n";
-      });
-
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8," });
-      const objUrl = URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.setAttribute("href", objUrl);
-      link.setAttribute(
-        "download",
-        `Pagespeed report for ${callbacks.getDomainNameFromUrl()} - ${new Date().toLocaleString()}.csv`
-      );
-      link.click();
+        console.log(context.pagespeedResults);
+        if (page < parseInt(result?.totalPages)) {
+          page += 1;
+        } else {
+          isDone = true;
+          context.status = "";
+        }
+      }
     }
   },
   callbacks: {
@@ -201,6 +246,36 @@ const { state, callbacks } = store("pagespeed-app", {
         return state.seoSorted ? b?.seo - a?.seo : a?.seo - b?.seo;
       });
       state.seoSorted = !state.seoSorted;
+    },
+    downloadCSV: () => {
+      const context = getContext();
+      if (context.pagespeedResults.length <= 0)
+        alert("Please generate a report first.");
+
+      const titleKeys = Object.keys(context.pagespeedResults[0]);
+
+      const refinedData = [];
+      refinedData.push(titleKeys);
+
+      context.pagespeedResults.forEach((item) => {
+        refinedData.push(Object.values(item));
+      });
+      let csvContent = "";
+
+      refinedData.forEach((row) => {
+        csvContent += row.join(",") + "\n";
+      });
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8," });
+      const objUrl = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.setAttribute("href", objUrl);
+      link.setAttribute(
+        "download",
+        `Pagespeed report for ${callbacks.getDomainNameFromUrl()} - ${new Date().toLocaleString()}.csv`
+      );
+      link.click();
     }
   }
 });

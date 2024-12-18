@@ -201,7 +201,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 		</div>
 
 		<div class="w-ful mt-4" data-wp-bind--hidden="!state.isNotEmpty">
-			<button data-wp-bind--disabled="context.processing" data-wp-on--click="actions.downloadCSV" class="<?php echo $submit_btn_class; ?> flex gap-2 "><img src="<?php echo WPA_BLOCKS_ROOT_URL; ?>assets/csv.png" data-wp-style--background="context.bgcolor">Download CSV</button>
+			<button data-wp-bind--disabled="context.processing" data-wp-on--click="callbacks.downloadCSV" class="<?php echo $submit_btn_class; ?> flex gap-2 "><img src="<?php echo WPA_BLOCKS_ROOT_URL; ?>assets/csv.png" data-wp-style--background="context.bgcolor">Download CSV</button>
 		</div>
 
 		<div data-wp-bind--hidden="!state.isNotEmpty">

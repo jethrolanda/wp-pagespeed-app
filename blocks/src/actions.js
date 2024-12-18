@@ -52,6 +52,27 @@ export async function pageSpeed(urls, params) {
 
 export async function getPages(url, params) {
   try {
+    const response = await fetch(`${url}wp-json/wp/v2/pages${params}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    const data = await response.json();
+    const urls = data.map((page) => page?.link);
+
+    return {
+      totalPages: response?.headers.get("x-wp-totalpages"),
+      urls
+    };
+
+    // return { response, urls };
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getPosts(url, params) {
+  try {
     const response = await fetch(`${url}wp-json/wp/v2/posts${params}`);
     if (!response.ok) {
       throw new Error("Failed to fetch data");
@@ -60,6 +81,27 @@ export async function getPages(url, params) {
     const data = await response.json();
     const urls = data.map((page) => page?.link);
 
+    return {
+      totalPages: response?.headers.get("x-wp-totalpages"),
+      urls
+    };
+
+    // return { response, urls };
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getCustomPostTypes(url, params) {
+  try {
+    const response = await fetch(`${url}wp-json/wp/v2/cpts${params}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    const data = await response.json();
+    const urls = data.map((page) => page?.link);
+    console.log(response?.headers, response?.headers.get("x-wp-totalpages"));
     return {
       totalPages: response?.headers.get("x-wp-totalpages"),
       urls
