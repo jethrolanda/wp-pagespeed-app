@@ -62,10 +62,9 @@ export async function getPages(url, params) {
 
     return {
       totalPages: response?.headers.get("x-wp-totalpages"),
+      totalEntries: response?.headers.get("x-wp-total"),
       urls
     };
-
-    // return { response, urls };
   } catch (error) {
     console.error(error);
   }
@@ -83,10 +82,9 @@ export async function getPosts(url, params) {
 
     return {
       totalPages: response?.headers.get("x-wp-totalpages"),
+      totalEntries: response?.headers.get("x-wp-total"),
       urls
     };
-
-    // return { response, urls };
   } catch (error) {
     console.error(error);
   }
@@ -101,13 +99,12 @@ export async function getCustomPostTypes(url, params) {
 
     const data = await response.json();
     const urls = data.map((page) => page?.link);
-    console.log(response?.headers, response?.headers.get("x-wp-totalpages"));
+
     return {
       totalPages: response?.headers.get("x-wp-totalpages"),
+      totalEntries: response?.headers.get("x-wp-total"),
       urls
     };
-
-    // return { response, urls };
   } catch (error) {
     console.error(error);
   }

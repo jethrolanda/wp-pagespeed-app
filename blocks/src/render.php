@@ -27,10 +27,32 @@ $context = array(
 	'processing' => false,
 	'submitBtnText' => 'Submit',
 	'pagespeedResults' => array(),
-	'status' => '', // ex: Page 1 out of 10
-	'page' => 1,
-	'totalPages' => 1,
-	'isDone' => false,
+	'status' => array(
+		'page' => array(
+			'text' => 'Waiting...',
+			'page' => 1,
+			'totalPages' => 1,
+			'totalEntries' => 0,
+			'isDone' => false,
+			'processing' => false,
+		),
+		'post' => array(
+			'text' => 'Waiting...',
+			'page' => 1,
+			'totalPages' => 1,
+			'totalEntries' => 0,
+			'isDone' => false,
+			'processing' => false,
+		),
+		'cpts' => array(
+			'text' => 'Waiting...',
+			'page' => 1,
+			'totalPages' => 1,
+			'totalEntries' => 0,
+			'isDone' => false,
+			'processing' => false,
+		)
+	),
 	'bgcolor' => '', // processing bg color
 );
 
@@ -191,19 +213,42 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 			</fieldset>
 		</div>
 
-		<button data-wp-on--click="actions.submit" data-wp-bind--disabled="context.processing" data-wp-text="context.submitBtnText" class="<?php echo $submit_btn_class; ?>" data-wp-class--bg-indigo-400="context.processing">Submit</button>
+		<button data-wp-on--click="actions.submit" data-wp-bind--disabled="context.processing" data-wp-text="context.submitBtnText" class="<?php echo $submit_btn_class; ?>">Submit</button>
+		<!-- data-wp-bind--hidden="!context.processing"  -->
+		<div class="bg-teal-100 mt-10">
+			<div class="p-4 flex">
+				<div class="w-full mb-4">
+					<h2 class="text-lg font-bold text-gray-900">Page</h2>
+					<p>Total Entries: <span data-wp-text="context.status.page.totalEntries"></span></p>
+					<p data-wp-text="context.status.page.text"></p>
+					<div data-wp-text="state.getPageProgressPercentage" data-wp-bind--hidden="!context.status.page.processing">0%</div>
+					<div class="loader" data-wp-bind--hidden="!context.status.page.processing"></div>
 
-		<div class="w-full mt-4" data-wp-bind--hidden="!context.processing">
-			<p class="text-center text-lg font-bold mb-2" data-wp-text="context.status"></p>
-			<div class="bg-slate-200 w-full rounded-2xl">
-				<div class="bg-slate-400 text-slate-200 rounded-2xl p-1 text-center" data-wp-style--width="state.progressPercentage" data-wp-text="state.progressPercentage">100%</div>
+				</div>
+				<div class="w-full mb-4">
+					<h2 class="text-lg font-bold text-gray-900">Post</h2>
+					<p>Total Entries: <span data-wp-text="context.status.post.totalEntries"></span></p>
+					<p data-wp-text="context.status.post.text"></p>
+					<div data-wp-text="state.getPostProgressPercentage" data-wp-bind--hidden="!context.status.post.processing">0%</div>
+					<div class="loader" data-wp-bind--hidden="!context.status.post.processing"></div>
+				</div>
+				<div class="w-full mb-4">
+					<h2 class="text-lg font-bold text-gray-900">Custom Post Types</h2>
+					<p>Total Entries: <span data-wp-text="context.status.cpts.totalEntries"></span></p>
+					<p data-wp-text="context.status.cpts.text"></p>
+					<div data-wp-text="state.getCptsProgressPercentage" data-wp-bind--hidden="!context.status.cpts.processing">0%</div>
+					<div class="loader" data-wp-bind--hidden="!context.status.cpts.processing"></div>
+				</div>
 			</div>
 		</div>
+
+
 
 		<div class="w-ful mt-4" data-wp-bind--hidden="!state.isNotEmpty">
 			<button data-wp-bind--disabled="context.processing" data-wp-on--click="callbacks.downloadCSV" class="<?php echo $submit_btn_class; ?> flex gap-2 "><img src="<?php echo WPA_BLOCKS_ROOT_URL; ?>assets/csv.png" data-wp-style--background="context.bgcolor">Download CSV</button>
 		</div>
 
+		<h1 class="text-lg font-bold text-gray-900 text-center p-4">Pagespeed Results:</h1>
 		<div data-wp-bind--hidden="!state.isNotEmpty">
 			<table class="w-full table-auto">
 				<tbody>
@@ -215,7 +260,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 						<th data-wp-bind--hidden="!state.isSeoSelected" data-wp-on--click="callbacks.sortSeo" class="cursor-pointer">SEO</th>
 					</tr>
 					<template data-wp-each="context.pagespeedResults">
-						<tr>
+						<tr class="even:bg-gray-50 odd:bg-white">
 							<td data-wp-text="context.item.url"></td>
 							<td data-wp-bind--hidden="!state.isPerformanceSelected" data-wp-text="context.item.performance"></td>
 							<td data-wp-bind--hidden="!state.isAccessibility" data-wp-text="context.item.accessibility"></td>

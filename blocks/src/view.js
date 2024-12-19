@@ -24,14 +24,32 @@ const { state, actions, callbacks } = store("pagespeed-app", {
     get isSeoSelected() {
       return getContext().category.includes("seo");
     },
-    get progressPercentage() {
+    get getPageProgressPercentage() {
       const context = getContext();
-      const progress = Math.round((context.page / context.totalPages) * 100);
-      return `${progress < 5 ? "5" : progress}%`;
+      const progress = Math.round(
+        (context.status.page.page / context.status.page.totalPages) * 100
+      );
+      return context.status.page.text == "Error!"
+        ? `Error!`
+        : `${progress < 5 ? "5" : progress}% complete!`;
     },
-    get getStatus() {
+    get getPostProgressPercentage() {
       const context = getContext();
-      return `${context.page} out of ${context.totalPages}`;
+      const progress = Math.round(
+        (context.status.post.page / context.status.post.totalPages) * 100
+      );
+      return context.status.post.text == "Error!"
+        ? `Error!`
+        : `${progress < 5 ? "5" : progress}% complete!`;
+    },
+    get getCptsProgressPercentage() {
+      const context = getContext();
+      const progress = Math.round(
+        (context.status.cpts.page / context.status.cpts.totalPages) * 100
+      );
+      return context.status.cpts.text == "Error!"
+        ? `Error!`
+        : `${progress < 5 ? "5" : progress}% complete!`;
     }
   },
   actions: {
@@ -42,15 +60,14 @@ const { state, actions, callbacks } = store("pagespeed-app", {
       if (callbacks.isUrlValid()) {
         context.bgcolor = "#fff";
         context.processing = true;
-        context.isDone = false;
         context.submitBtnText = "Processing...";
 
         try {
-          if (context.post_types.includes("post")) {
-            await actions.generateReportPosts(context);
-          }
           if (context.post_types.includes("page")) {
             await actions.generateReportPages(context);
+          }
+          if (context.post_types.includes("post")) {
+            await actions.generateReportPosts(context);
           }
           if (context.post_types.includes("custom_post_type")) {
             actions.generateReportCustomPostTypes(context);
@@ -80,7 +97,7 @@ const { state, actions, callbacks } = store("pagespeed-app", {
           console.log(error);
           alert("Error: Make sure the site is powered by wordpress");
         } finally {
-          context.processing = false;
+          // context.processing = false;
           context.submitBtnText = "Submit";
           context.bgcolor = "";
         }
@@ -89,69 +106,111 @@ const { state, actions, callbacks } = store("pagespeed-app", {
       }
     },
     generateReportPages: async (context) => {
-      let isDone = false;
-      let page = 1;
-      while (!isDone) {
-        const query = `?page=${page}`;
-        const result = await getPages(context.url, query);
-        context.status = `Page ${page} out of ${result?.totalPages}`;
-        const params = `strategy=${
-          context.device
-        }&category=${context.category.join("&category=")}`;
-        const scores = await pageSpeed(result?.urls, params);
-        context.pagespeedResults = [...context.pagespeedResults, ...scores];
+      try {
+        context.status.page.processing = true;
+        context.status.page.isDone = false;
+        let isDone = context.status.page.isDone;
+        let page = context.status.page.page;
+        let counter = 0;
+        while (!isDone) {
+          const query = `?page=${page}`;
+          const result = await getPages(context.url, query);
+          counter += result?.urls.length;
+          context.status.page.text = `Processing ${counter} out of ${result?.totalEntries}`;
+          context.status.page.totalPages = result?.totalPages;
+          context.status.page.totalEntries = result?.totalEntries;
+          const params = `strategy=${
+            context.device
+          }&category=${context.category.join("&category=")}`;
+          const scores = await pageSpeed(result?.urls, params);
+          context.pagespeedResults = [...context.pagespeedResults, ...scores];
 
-        console.log(context.pagespeedResults);
-        if (page < parseInt(result?.totalPages)) {
-          page += 1;
-        } else {
-          isDone = true;
-          context.status = "";
+          console.log(context.pagespeedResults);
+          if (page < parseInt(result?.totalPages)) {
+            context.status.page.page += 1;
+            page += 1;
+          } else {
+            isDone = true;
+            context.status.page.isDone = true;
+            context.status.page.processing = false;
+            context.status.page.text = "Done!";
+          }
         }
+      } catch (error) {
+        context.status.page.text = "Error!";
+        context.status.page.processing = false;
       }
     },
     generateReportPosts: async (context) => {
-      let isDone = false;
-      let page = 1;
-      while (!isDone) {
-        const query = `?page=${page}`;
-        const result = await getPosts(context.url, query);
-        context.status = `Page ${page} out of ${result?.totalPages}`;
-        const params = `strategy=${
-          context.device
-        }&category=${context.category.join("&category=")}`;
-        const scores = await pageSpeed(result?.urls, params);
-        context.pagespeedResults = [...context.pagespeedResults, ...scores];
+      try {
+        context.status.post.processing = true;
+        context.status.post.isDone = false;
+        let isDone = context.status.post.isDone;
+        let page = context.status.post.page;
+        let counter = 0;
+        while (!isDone) {
+          const query = `?page=${page}`;
+          const result = await getPosts(context.url, query);
+          counter += result?.urls.length;
+          context.status.post.text = `${counter} out of ${result?.totalEntries}`;
+          context.status.post.totalPages = result?.totalPages;
+          context.status.post.totalEntries = result?.totalEntries;
+          const params = `strategy=${
+            context.device
+          }&category=${context.category.join("&category=")}`;
+          const scores = await pageSpeed(result?.urls, params);
+          context.pagespeedResults = [...context.pagespeedResults, ...scores];
 
-        console.log(context.pagespeedResults);
-        if (page < parseInt(result?.totalPages)) {
-          page += 1;
-        } else {
-          isDone = true;
-          context.status = "";
+          console.log(context.pagespeedResults);
+          if (page < parseInt(result?.totalPages)) {
+            context.status.post.page += 1;
+            page += 1;
+          } else {
+            isDone = true;
+            context.status.post.isDone = true;
+            context.status.post.processing = false;
+            context.status.post.text = "Done!";
+          }
         }
+      } catch (error) {
+        context.status.post.text = "Error!";
+        context.status.post.processing = false;
       }
     },
     generateReportCustomPostTypes: async (context) => {
-      let isDone = false;
-      let page = 1;
-      while (!isDone) {
-        const query = `?page=${page}`;
-        const result = await getCustomPostTypes(context.url, query);
-        context.status = `Page ${page} out of ${result?.totalPages}`;
-        const params = `strategy=${
-          context.device
-        }&category=${context.category.join("&category=")}`;
-        const scores = await pageSpeed(result?.urls, params);
-        context.pagespeedResults = [...context.pagespeedResults, ...scores];
+      try {
+        context.status.cpts.processing = true;
+        context.status.cpts.isDone = false;
+        let isDone = context.status.cpts.isDone;
+        let page = context.status.cpts.page;
+        let counter = 0;
+        while (!isDone) {
+          const query = `?page=${page}`;
+          const result = await getCustomPostTypes(context.url, query);
+          counter += result?.urls.length;
+          context.status.cpts.text = `${counter} out of ${result?.totalEntries}`;
+          context.status.cpts.totalPages = result?.totalPages;
+          context.status.cpts.totalEntries = result?.totalEntries;
+          const params = `strategy=${
+            context.device
+          }&category=${context.category.join("&category=")}`;
+          const scores = await pageSpeed(result?.urls, params);
+          context.pagespeedResults = [...context.pagespeedResults, ...scores];
 
-        console.log(context.pagespeedResults);
-        if (page < parseInt(result?.totalPages)) {
-          page += 1;
-        } else {
-          isDone = true;
-          context.status = "";
+          console.log(context.pagespeedResults);
+          if (page < parseInt(result?.totalPages)) {
+            context.status.cpts.page += 1;
+            page += 1;
+          } else {
+            isDone = true;
+            context.status.cpts.isDone = true;
+            context.status.cpts.processing = false;
+            context.status.cpts.text = "Done!";
+          }
         }
+      } catch (error) {
+        context.status.cpts.text = "Error!";
+        context.status.cpts.processing = false;
       }
     }
   },
@@ -200,9 +259,6 @@ const { state, actions, callbacks } = store("pagespeed-app", {
             "(\\#[-a-z\\d_]*)?$", // fragment locator
           "i"
         );
-
-        // console.log(new URL(context.url));
-        // return new URL(context.url) ? true : false;
         return pattern.test(context.url);
       } catch (error) {
         return false;
