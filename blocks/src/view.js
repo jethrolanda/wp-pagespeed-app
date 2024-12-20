@@ -90,7 +90,7 @@ const { state, actions, callbacks } = store("pagespeed-app", {
             await actions.generateReportPosts(context);
           }
           if (context.post_types.includes("custom_post_type")) {
-            actions.generateReportCustomPostTypes(context);
+            await actions.generateReportCustomPostTypes(context);
           }
 
           // while (!context.isDone) {
