@@ -28,5 +28,5 @@ import { useBlockProps } from "@wordpress/block-editor";
 export default function Edit({ attributes, setAttributes }) {
   const blockProps = useBlockProps();
 
-  return <p {...blockProps}>{__("Pagespeed App - see frontend", "blocks")}</p>;
+  return <div class="pagespeed-app-wrapper-class"><p {...blockProps}>{__("Pagespeed App - see frontend", "blocks")}</p></>;
 }

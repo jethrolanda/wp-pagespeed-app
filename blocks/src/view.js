@@ -13,7 +13,6 @@ const { state, actions, callbacks } = store("pagespeed-app", {
       return getContext().pagespeedResults.length > 0;
     },
     get isReportComplete() {
-      console.log(getContext().post_types, getContext().completed);
       return (
         JSON.stringify(getContext().post_types.sort()) ===
         JSON.stringify(getContext().completed.sort())
