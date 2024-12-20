@@ -57,11 +57,6 @@ $context = array(
 	'completed' => array() // post types that are completed
 );
 
-$radio_btn_class = 'class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"';
-
-$checkbox_class = 'class="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"';
-
-$submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 mt-4';
 ?>
 
 <div class="pagespeed-app-wrapper-class">
@@ -78,11 +73,11 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 				<legend class="text-sm/6 font-semibold text-gray-900">Device</legend>
 				<div class="mt-2 flex flex-row gap-4">
 					<div class="flex items-center gap-2">
-						<input name="device" type="radio" id="mobile" value="mobile" checked data-wp-on--click="callbacks.setOptions" <?php echo $radio_btn_class; ?>>
+						<input name="device" type="radio" id="mobile" value="mobile" checked data-wp-on--click="callbacks.setOptions" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden">
 						<label for="mobile" class="block text-sm/6 font-medium text-gray-900">Mobile</label>
 					</div>
 					<div class="flex items-center gap-2">
-						<input name="device" type="radio" id="desktop" value="desktop" data-wp-on--click="callbacks.setOptions" <?php echo $radio_btn_class; ?>>
+						<input name="device" type="radio" id="desktop" value="desktop" data-wp-on--click="callbacks.setOptions" class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden">
 						<label for="desktop" class="block text-sm/6 font-medium text-gray-900">Desktop</label>
 					</div>
 				</div>
@@ -96,7 +91,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 					<div class="flex gap-2">
 						<div class="flex h-6 shrink-0 items-center">
 							<div class="group grid size-4 grid-cols-1">
-								<input type="checkbox" id="page" name="post_types" value="page" checked data-wp-on--click="callbacks.setOptions" <?php echo $checkbox_class; ?>>
+								<input type="checkbox" id="page" name="post_types" value="page" checked data-wp-on--click="callbacks.setOptions" class="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto">
 								<svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
 									<path class="opacity-0 group-has-[:checked]:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 									<path class="opacity-0 group-has-[:indeterminate]:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -112,7 +107,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 					<div class="flex gap-2">
 						<div class="flex h-6 shrink-0 items-center">
 							<div class="group grid size-4 grid-cols-1">
-								<input type="checkbox" id="post" name="post_types" value="post" checked data-wp-on--click="callbacks.setOptions" <?php echo $checkbox_class; ?>>
+								<input type="checkbox" id="post" name="post_types" value="post" checked data-wp-on--click="callbacks.setOptions" class="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto">
 								<svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
 									<path class="opacity-0 group-has-[:checked]:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 									<path class="opacity-0 group-has-[:indeterminate]:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -128,7 +123,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 					<div class="flex gap-2">
 						<div class="flex h-6 shrink-0 items-center">
 							<div class="group grid size-4 grid-cols-1">
-								<input type="checkbox" id="custom_post_type" name="post_types" value="custom_post_type" checked data-wp-on--click="callbacks.setOptions" <?php echo $checkbox_class; ?>>
+								<input type="checkbox" id="custom_post_type" name="post_types" value="custom_post_type" checked data-wp-on--click="callbacks.setOptions" class="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto">
 								<svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
 									<path class="opacity-0 group-has-[:checked]:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 									<path class="opacity-0 group-has-[:indeterminate]:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -150,7 +145,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 					<div class="flex gap-2">
 						<div class="flex h-6 shrink-0 items-center">
 							<div class="group grid size-4 grid-cols-1">
-								<input type="checkbox" id="performance" name="category" value="performance" checked data-wp-on--click="callbacks.setOptions" <?php echo $checkbox_class; ?>>
+								<input type="checkbox" id="performance" name="category" value="performance" checked data-wp-on--click="callbacks.setOptions" class="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto">
 								<svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
 									<path class="opacity-0 group-has-[:checked]:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 									<path class="opacity-0 group-has-[:indeterminate]:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -166,7 +161,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 					<div class="flex gap-2">
 						<div class="flex h-6 shrink-0 items-center">
 							<div class="group grid size-4 grid-cols-1">
-								<input type="checkbox" id="accessibility" name="category" value="accessibility" checked data-wp-on--click="callbacks.setOptions" <?php echo $checkbox_class; ?>>
+								<input type="checkbox" id="accessibility" name="category" value="accessibility" checked data-wp-on--click="callbacks.setOptions" class="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto">
 								<svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
 									<path class="opacity-0 group-has-[:checked]:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 									<path class="opacity-0 group-has-[:indeterminate]:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -182,7 +177,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 					<div class="flex gap-2">
 						<div class="flex h-6 shrink-0 items-center">
 							<div class="group grid size-4 grid-cols-1">
-								<input type="checkbox" id="best-practices" name="category" value="best-practices" checked data-wp-on--click="callbacks.setOptions" <?php echo $checkbox_class; ?>>
+								<input type="checkbox" id="best-practices" name="category" value="best-practices" checked data-wp-on--click="callbacks.setOptions" class="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto">
 								<svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
 									<path class="opacity-0 group-has-[:checked]:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 									<path class="opacity-0 group-has-[:indeterminate]:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -198,7 +193,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 					<div class="flex gap-2">
 						<div class="flex h-6 shrink-0 items-center">
 							<div class="group grid size-4 grid-cols-1">
-								<input type="checkbox" id="seo" name="category" value="seo" checked data-wp-on--click="callbacks.setOptions" <?php echo $checkbox_class; ?>>
+								<input type="checkbox" id="seo" name="category" value="seo" checked data-wp-on--click="callbacks.setOptions" class="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto">
 								<svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
 									<path class="opacity-0 group-has-[:checked]:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
 									<path class="opacity-0 group-has-[:indeterminate]:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -213,7 +208,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 			</fieldset>
 		</div>
 
-		<button data-wp-on--click="actions.submit" data-wp-bind--disabled="context.processing" data-wp-text="context.submitBtnText" class="<?php echo $submit_btn_class; ?>">Submit</button>
+		<button data-wp-on--click="actions.submit" data-wp-bind--disabled="context.processing" data-wp-text="context.submitBtnText" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 mt-4">Submit</button>
 		<!-- data-wp-bind--hidden="!context.processing"  -->
 		<div data-wp-bind--hidden="!state.isReportComplete" class="bg-teal-100 mt-10">
 			<div class="p-4 flex">
