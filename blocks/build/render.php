@@ -210,7 +210,7 @@ $context = array(
 
 		<button data-wp-on--click="actions.submit" data-wp-bind--disabled="context.processing" data-wp-text="context.submitBtnText" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 mt-4">Submit</button>
 		<!-- data-wp-bind--hidden="!context.processing"  -->
-		<div data-wp-bind--hidden="context.processing" class="bg-teal-100 mt-10">
+		<div data-wp-bind--hidden="!context.processing" class="bg-teal-100 mt-10">
 			<div class="p-4 flex">
 				<div class="w-full" data-wp-bind--hidden="!state.isPageSelected">
 					<h2 class="text-lg font-bold text-gray-900">Page</h2>
