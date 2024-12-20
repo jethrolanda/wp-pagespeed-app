@@ -53,7 +53,8 @@ $context = array(
 			'processing' => false,
 		)
 	),
-	'bgcolor' => '', // processing bg color
+	'totalLinks' => 0,
+	'completed' => array() // post types that are completed
 );
 
 $radio_btn_class = 'class="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden"';
@@ -67,8 +68,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 	<div
 		data-wp-interactive="pagespeed-app"
 		<?php echo get_block_wrapper_attributes(); ?>
-		<?php echo wp_interactivity_data_wp_context($context); ?>
-		data-wp-watch="callbacks.logIsOpen">
+		<?php echo wp_interactivity_data_wp_context($context); ?>>
 		<div class="mt-4 space-y-10">
 			<input type="text" placeholder="Site url. Example: https://www.fuellogic.net/" data-wp-on--keyup="callbacks.setUrl" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
 		</div>
@@ -136,7 +136,7 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 							</div>
 						</div>
 						<div class="text-sm/6">
-							<label for="custom_post_type" class="font-medium text-gray-900">Custom Post Type</label>
+							<label for="custom_post_type" class="font-medium text-gray-900">Custom Post Types</label>
 						</div>
 					</div>
 				</div>
@@ -215,26 +215,26 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 
 		<button data-wp-on--click="actions.submit" data-wp-bind--disabled="context.processing" data-wp-text="context.submitBtnText" class="<?php echo $submit_btn_class; ?>">Submit</button>
 		<!-- data-wp-bind--hidden="!context.processing"  -->
-		<div class="bg-teal-100 mt-10">
+		<div data-wp-bind--hidden="!context.processing" class="bg-teal-100 mt-10">
 			<div class="p-4 flex">
-				<div class="w-full mb-4">
+				<div class="w-full" data-wp-bind--hidden="!state.isPageSelected">
 					<h2 class="text-lg font-bold text-gray-900">Page</h2>
-					<p>Total Entries: <span data-wp-text="context.status.page.totalEntries"></span></p>
+					<p>Total Links: <span data-wp-text="context.status.page.totalEntries"></span></p>
 					<p data-wp-text="context.status.page.text"></p>
 					<div data-wp-text="state.getPageProgressPercentage" data-wp-bind--hidden="!context.status.page.processing">0%</div>
 					<div class="loader" data-wp-bind--hidden="!context.status.page.processing"></div>
 
 				</div>
-				<div class="w-full mb-4">
+				<div class="w-full" data-wp-bind--hidden="!state.isPostSelected">
 					<h2 class="text-lg font-bold text-gray-900">Post</h2>
-					<p>Total Entries: <span data-wp-text="context.status.post.totalEntries"></span></p>
+					<p>Total Links: <span data-wp-text="context.status.post.totalEntries"></span></p>
 					<p data-wp-text="context.status.post.text"></p>
 					<div data-wp-text="state.getPostProgressPercentage" data-wp-bind--hidden="!context.status.post.processing">0%</div>
 					<div class="loader" data-wp-bind--hidden="!context.status.post.processing"></div>
 				</div>
-				<div class="w-full mb-4">
+				<div class="w-full" data-wp-bind--hidden="!state.isCptsSelected">
 					<h2 class="text-lg font-bold text-gray-900">Custom Post Types</h2>
-					<p>Total Entries: <span data-wp-text="context.status.cpts.totalEntries"></span></p>
+					<p>Total Links: <span data-wp-text="context.status.cpts.totalEntries"></span></p>
 					<p data-wp-text="context.status.cpts.text"></p>
 					<div data-wp-text="state.getCptsProgressPercentage" data-wp-bind--hidden="!context.status.cpts.processing">0%</div>
 					<div class="loader" data-wp-bind--hidden="!context.status.cpts.processing"></div>
@@ -244,11 +244,11 @@ $submit_btn_class = 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold te
 
 
 
-		<div class="w-ful mt-4" data-wp-bind--hidden="!state.isNotEmpty">
-			<button data-wp-bind--disabled="context.processing" data-wp-on--click="callbacks.downloadCSV" class="<?php echo $submit_btn_class; ?> flex gap-2 "><img src="<?php echo WPA_BLOCKS_ROOT_URL; ?>assets/csv.png" data-wp-style--background="context.bgcolor">Download CSV</button>
+		<div class="w-ful mt-4" data-wp-bind--hidden="!state.isReportComplete">
+			<button data-wp-bind--disabled="!state.isReportComplete" data-wp-on--click="callbacks.downloadCSV" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded flex items-center gap-2"><img src="<?php echo WPA_BLOCKS_ROOT_URL; ?>assets/csv.png">Download CSV</button>
 		</div>
 
-		<h1 class="text-lg font-bold text-gray-900 text-center p-4">Pagespeed Results:</h1>
+		<h1 data-wp-bind--hidden="!state.isNotEmpty" class="text-lg font-bold text-gray-900 text-center p-4">Pagespeed Results: <span data-wp-text="context.totalLinks"></span> link(s)</h1>
 		<div data-wp-bind--hidden="!state.isNotEmpty">
 			<table class="w-full table-auto">
 				<tbody>

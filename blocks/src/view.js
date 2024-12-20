@@ -12,6 +12,22 @@ const { state, actions, callbacks } = store("pagespeed-app", {
     get isNotEmpty() {
       return getContext().pagespeedResults.length > 0;
     },
+    get isReportComplete() {
+      console.log(getContext().post_types, getContext().completed);
+      return (
+        JSON.stringify(getContext().post_types.sort()) ===
+        JSON.stringify(getContext().completed.sort())
+      );
+    },
+    get isPageSelected() {
+      return getContext().post_types.includes("page");
+    },
+    get isPostSelected() {
+      return getContext().post_types.includes("post");
+    },
+    get isCptsSelected() {
+      return getContext().post_types.includes("custom_post_type");
+    },
     get isPerformanceSelected() {
       return getContext().category.includes("performance");
     },
@@ -55,10 +71,15 @@ const { state, actions, callbacks } = store("pagespeed-app", {
   actions: {
     submit: async () => {
       const context = getContext();
-      context.pagespeedResults = [];
-      console.log(context.post_types);
+
+      callbacks.resetValues(context);
+      if (context.post_types.length <= 0) {
+        alert("Please select post a post type.");
+      }
+      if (context.category.length <= 0) {
+        alert("Please select post a category.");
+      }
       if (callbacks.isUrlValid()) {
-        context.bgcolor = "#fff";
         context.processing = true;
         context.submitBtnText = "Processing...";
 
@@ -97,9 +118,8 @@ const { state, actions, callbacks } = store("pagespeed-app", {
           console.log(error);
           alert("Error: Make sure the site is powered by wordpress");
         } finally {
-          // context.processing = false;
+          context.processing = false;
           context.submitBtnText = "Submit";
-          context.bgcolor = "";
         }
       } else {
         alert("Invalid URL");
@@ -125,7 +145,8 @@ const { state, actions, callbacks } = store("pagespeed-app", {
           const scores = await pageSpeed(result?.urls, params);
           context.pagespeedResults = [...context.pagespeedResults, ...scores];
 
-          console.log(context.pagespeedResults);
+          context.totalLinks += result?.urls.length;
+          // console.log(context.pagespeedResults);
           if (page < parseInt(result?.totalPages)) {
             context.status.page.page += 1;
             page += 1;
@@ -139,6 +160,9 @@ const { state, actions, callbacks } = store("pagespeed-app", {
       } catch (error) {
         context.status.page.text = "Error!";
         context.status.page.processing = false;
+        context.status.page.isDone = true;
+      } finally {
+        context.completed = [...context.completed, "page"];
       }
     },
     generateReportPosts: async (context) => {
@@ -161,7 +185,8 @@ const { state, actions, callbacks } = store("pagespeed-app", {
           const scores = await pageSpeed(result?.urls, params);
           context.pagespeedResults = [...context.pagespeedResults, ...scores];
 
-          console.log(context.pagespeedResults);
+          context.totalLinks += result?.urls.length;
+          // console.log(context.pagespeedResults);
           if (page < parseInt(result?.totalPages)) {
             context.status.post.page += 1;
             page += 1;
@@ -175,6 +200,9 @@ const { state, actions, callbacks } = store("pagespeed-app", {
       } catch (error) {
         context.status.post.text = "Error!";
         context.status.post.processing = false;
+        context.status.post.isDone = true;
+      } finally {
+        context.completed = [...context.completed, "post"];
       }
     },
     generateReportCustomPostTypes: async (context) => {
@@ -197,7 +225,8 @@ const { state, actions, callbacks } = store("pagespeed-app", {
           const scores = await pageSpeed(result?.urls, params);
           context.pagespeedResults = [...context.pagespeedResults, ...scores];
 
-          console.log(context.pagespeedResults);
+          context.totalLinks += result?.urls.length;
+          // console.log(context.pagespeedResults);
           if (page < parseInt(result?.totalPages)) {
             context.status.cpts.page += 1;
             page += 1;
@@ -211,6 +240,9 @@ const { state, actions, callbacks } = store("pagespeed-app", {
       } catch (error) {
         context.status.cpts.text = "Error!";
         context.status.cpts.processing = false;
+        context.status.cpts.isDone = true;
+      } finally {
+        context.completed = [...context.completed, "custom_post_type"];
       }
     }
   },
@@ -332,6 +364,37 @@ const { state, actions, callbacks } = store("pagespeed-app", {
         `Pagespeed report for ${callbacks.getDomainNameFromUrl()} - ${new Date().toLocaleString()}.csv`
       );
       link.click();
+    },
+    resetValues: (context) => {
+      context.pagespeedResults = [];
+      context.completed = [];
+      context.totalLinks = 0;
+      context.status = {
+        page: {
+          text: "Waiting...",
+          page: 1,
+          totalPages: 1,
+          totalEntries: 0,
+          isDone: false,
+          processing: false
+        },
+        post: {
+          text: "Waiting...",
+          page: 1,
+          totalPages: 1,
+          totalEntries: 0,
+          isDone: false,
+          processing: false
+        },
+        cpts: {
+          text: "Waiting...",
+          page: 1,
+          totalPages: 1,
+          totalEntries: 0,
+          isDone: false,
+          processing: false
+        }
+      };
     }
   }
 });
