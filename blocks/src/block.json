@@ -5,6 +5,9 @@
 	"version": "0.1.0",
 	"title": "Pagespeed App",
 	"category": "pagespeed-app-block",
+	"attributes": {
+    "sites": { "type": "array", "default": [] }
+  },
 	"icon": "media-interactive",
 	"description": "An interactive block with the Interactivity API",
 	"example": {},

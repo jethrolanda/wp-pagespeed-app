@@ -1,3 +1,12 @@
+import {
+  TextControl,
+  Flex,
+  FlexBlock,
+  FlexItem,
+  Button,
+  Icon
+} from "@wordpress/components";
+
 /**
  * Retrieves the translation of text.
  *
@@ -28,9 +37,52 @@ import { useBlockProps } from "@wordpress/block-editor";
 export default function Edit({ attributes, setAttributes }) {
   const blockProps = useBlockProps();
 
+  function deleteAnswer(indexToDelete) {
+    const newSite = attributes.sites.filter(function (x, index) {
+      return index != indexToDelete;
+    });
+    setAttributes({ sites: newSite });
+  }
+
   return (
-    <div class="pagespeed-app-wrapper-class">
-      <p {...blockProps}>{__("Pagespeed App - see frontend", "blocks")}</p>
+    <div {...blockProps}>
+      {attributes.sites.map(function (answer, index) {
+        return (
+          <Flex>
+            <FlexBlock>
+              <TextControl
+                autoFocus={answer == undefined}
+                value={answer}
+                placeholder="Site URL"
+                onChange={(newValue) => {
+                  const newSite = attributes.sites.concat([]);
+                  newSite[index] = newValue;
+                  setAttributes({ sites: newSite });
+                }}
+              />
+            </FlexBlock>
+            <FlexItem>
+              <Button
+                isLink
+                className="attention-delete"
+                onClick={() => deleteAnswer(index)}
+              >
+                Delete
+              </Button>
+            </FlexItem>
+          </Flex>
+        );
+      })}
+      <Button
+        isPrimary
+        onClick={() => {
+          setAttributes({
+            sites: attributes.sites.concat([undefined])
+          });
+        }}
+      >
+        Add New Site
+      </Button>
     </div>
   );
 }

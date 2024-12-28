@@ -20,7 +20,7 @@ wp_interactivity_state('pagespeed-app', array(
 
 // Local Context
 $context = array(
-	'url' => '',
+	'url' => isset($attributes['sites'][0]) ? $attributes['sites'][0] : '',
 	'device' => 'mobile',
 	'post_types' => array('page', 'post', 'custom_post_type'),
 	'category' => array('performance', 'accessibility', 'best-practices', 'seo'),
@@ -54,9 +54,10 @@ $context = array(
 		)
 	),
 	'totalLinks' => 0,
-	'completed' => array() // post types that are completed
+	'completed' => array(), // post types that are completed
+	'error_message' => ''
 );
-
+error_log(print_r($attributes, true));
 ?>
 
 <div class="pagespeed-app-wrapper-class">
@@ -65,7 +66,20 @@ $context = array(
 		<?php echo get_block_wrapper_attributes(); ?>
 		<?php echo wp_interactivity_data_wp_context($context); ?>>
 		<div class="mt-4 space-y-10">
-			<input type="text" placeholder="Site url. Example: https://www.fuellogic.net/" data-wp-on--keyup="callbacks.setUrl" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+			<select
+				data-wp-on--change="callbacks.setUrl"
+				class="w-full placeholder:text-slate-400 text-sm border bg-white border-slate-200 rounded-md pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer">
+				<?php
+				if (!empty($attributes['sites'])) {
+					foreach ($attributes['sites'] as $site) {
+						echo '<option value="' . $site . '">' . $site . '</option>';
+					}
+				} else {
+					echo '<option value="">No Sites</option>';
+				}
+				?>
+			</select>
+			<!-- <input type="text" placeholder="Site url. Example: https://www.fuellogic.net/" data-wp-on--keyup="callbacks.setUrl" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"> -->
 		</div>
 
 		<div class="mt-4 space-y-10">
